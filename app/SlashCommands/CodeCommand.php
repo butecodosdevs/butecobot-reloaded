@@ -62,7 +62,7 @@ class CodeCommand extends SlashCommand
               ->title('Codigo fonte do bot')
               ->content('Aí manolo o código do bot tá aqui ó, não palpite, commit!')
               ->buttons([
-                'GitHub' => 'https://github.com/butecodosdevs/butecobot',
+                'GitHub' => 'https://github.com/butecodosdevs/butecobot-reloaded',
             ])
               ->build()
         );
