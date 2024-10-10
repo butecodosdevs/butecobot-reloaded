@@ -63,6 +63,7 @@ return [
             'https://butecodosdevs.com/imgs/butecobot/drink-water-4.gif?v0.0.1',
             'https://butecodosdevs.com/imgs/butecobot/drink-water-5.png?v0.0.1',
             'https://butecodosdevs.com/imgs/butecobot/drink-water-6.gif?v0.0.1',
-        ]
+        ],
+        'jokenpo' => 'https://butecodosdevs.com/imgs/butecobot/jokenpo.png',
     ],
 ];

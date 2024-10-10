@@ -70,7 +70,7 @@ class PicassoCommand extends SlashCommand
     {
         $userCoinHistoryRepository = new UserCoinHistoryRepository;
         $prompt = $this->value('pinte');
-        $askCost = $originalAskCost = getenv('PICASSO_COINS_COST');
+        $askCost = $originalAskCost = env('PICASSO_COINS_COST');
 
         if (
             !RedisHelper::cooldown(
@@ -142,9 +142,9 @@ class PicassoCommand extends SlashCommand
                             'Authorization' => 'Bearer ' . env('OPENAI_API_KEY'),
                         ])
                         ->withBody(json_encode([
-                            "model" => getenv('PICASSO_IMAGE_GENERATION_MODEL'),
+                            "model" => env('PICASSO_IMAGE_GENERATION_MODEL'),
                             "prompt" => $prompt,
-                            "n" => (int) getenv('PICASSO_IMAGE_QTY'),
+                            "n" => (int) env('PICASSO_IMAGE_QTY'),
                         ]))
                         ->post('https://api.openai.com/v1/images/generations');
 

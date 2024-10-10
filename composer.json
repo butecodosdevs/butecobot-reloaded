@@ -7,7 +7,7 @@
   "require": {
     "php": "^8.2",
     "illuminate/redis": "^11.23",
-    "laracord/framework": "dev-main",
+    "laracord/framework": "^2.4.0",
     "predis/predis": "^2.0"
   },
   "require-dev": {

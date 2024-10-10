@@ -149,41 +149,6 @@ class EventsCommand extends SlashCommand
             'name' => 'listar',
             'description' => 'Lista eventos criados e pendentes para iniciar',
         ],
-        [
-            'type' => Option::SUB_COMMAND,
-            'name' => 'apostar',
-            'description' => 'Apostar nos eventos abertos',
-            'options' => [
-                [
-                    'type' => Option::INTEGER,
-                    'name' => 'evento',
-                    'description' => 'Número do evento',
-                    'required' => true,
-                ],
-                [
-                    'type' => Option::STRING,
-                    'name' => 'opcao',
-                    'description' => 'Opção A ou B.',
-                    'required' => true,
-                    'choices' => [
-                        [
-                            'name' => 'A',
-                            'value' => 'A'
-                        ],
-                        [
-                            'name' => 'B',
-                            'value' => 'B'
-                        ]
-                    ]
-                ],
-                [
-                    'type' => Option::NUMBER,
-                    'name' => 'valor',
-                    'description' => 'Quantidade de coins para apostar',
-                    'required' => true,
-                ],
-            ]
-        ]
     ];
 
     /**
@@ -239,9 +204,6 @@ class EventsCommand extends SlashCommand
                 break;
             case 'anunciar':
                 $this->announceEvent($interaction);
-                break;
-            case 'apostar':
-                $this->betEvent($interaction);
                 break;
             default:
                 $interaction->respondWithMessage(

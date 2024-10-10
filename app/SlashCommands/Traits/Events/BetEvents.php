@@ -15,21 +15,6 @@ use App\Repositories\UserRepository;
 trait BetEvents
 {
     /**
-     * Handle the slash command.
-     *
-     * @param  \Discord\Parts\Interactions\Interaction  $interaction
-     * @return mixed
-     */
-    public function betEvent($interaction)
-    {
-        $betEventId = $this->value('apostar.evento');
-        $betChoice = $this->value('apostar.opcao');
-        $betAmount = $this->value('apostar.valor');
-
-        $this->betEventBet($interaction, $betEventId, $betChoice, $betAmount);
-    }
-
-    /**
      * @param \Discord\Parts\Interactions\Interaction $interaction
      * @param string $choice
      * @return void

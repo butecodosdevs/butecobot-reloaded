@@ -4,6 +4,7 @@ namespace App\SlashCommands\Traits\Events;
 
 use Discord\Voice\VoiceClient;
 use Laracord\Commands\SlashCommand;
+use Illuminate\Support\Facades\Storage;
 use App\Repositories\EventRepository;
 
 /**
@@ -45,7 +46,7 @@ trait AnnounceEvents
         }
 
         $channel = $this->discord->getChannel($interaction->channel_id);
-        $audio = storage_path('sounds/rumble.mp3');
+        $audio = Storage::path('sounds/rumble.mp3');
         $voice = $this->discord->getVoiceClient($channel->guild_id);
 
         if ($channel->isVoiceBased() && $bannerKey === 'UFC') {

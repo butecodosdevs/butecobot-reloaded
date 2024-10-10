@@ -76,10 +76,12 @@ trait EndEvents
         $payoutEvent = $eventRepository->payoutEvent($eventId, $choiceOption);
 
         if (count($payoutEvent['winners']) === 0) {
-            $interaction->respondWithMessage($this->messageComposer->embed(
-                'Evento',
-                'Não houveram apostas neste evento!'
-            ), false);
+            $interaction->respondWithMessage(
+                $this->message('Não houveram apostas neste evento!')
+                    ->title('Eventos')
+                    ->build(),
+                    false
+                );
             return;
         }
 

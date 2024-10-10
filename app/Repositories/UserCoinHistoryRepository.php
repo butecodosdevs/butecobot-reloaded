@@ -105,6 +105,6 @@ class UserCoinHistoryRepository
             ->whereDate('created_at', DB::raw('CURDATE()'))
             ->get();
 
-        return $receivedAirplanes[0]->total_coins > getenv('LITTLE_AIRPLANES_MAXIMUM_AMOUNT_DAY');
+        return $receivedAirplanes[0]->total_coins > env('LITTLE_AIRPLANES_MAXIMUM_AMOUNT_DAY');
     }
 }

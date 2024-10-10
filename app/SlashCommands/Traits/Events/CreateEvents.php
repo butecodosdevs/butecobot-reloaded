@@ -11,8 +11,6 @@ use App\Repositories\EventRepository;
 trait CreateEvents
 {
     /**
-     * Handle the slash command.
-     *
      * @param  \Discord\Parts\Interactions\Interaction  $interaction
      * @return mixed
      */

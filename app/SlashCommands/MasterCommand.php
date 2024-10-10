@@ -150,8 +150,8 @@ class MasterCommand extends SlashCommand
                 $data = $this->makeQuestion(
                     $questionInput,
                     $boostInput
-                        ? getenv('MASTER_QUESTION_RESPONSE_TOKENS') + ($boostInput * 10)
-                        : getenv('MASTER_QUESTION_RESPONSE_TOKENS')
+                        ? env('MASTER_QUESTION_RESPONSE_TOKENS') + ($boostInput * 10)
+                        : env('MASTER_QUESTION_RESPONSE_TOKENS')
                 );
 
                 $message = sprintf(

@@ -43,7 +43,7 @@ class EventRepository
         $this->userRepository = new UserRepository;
         $this->userCoinHistoryRepository = new UserCoinHistoryRepository;
         $this->eventBetRepository = new EventBetRepository;
-        $this->eventExtraLuckyChance = getenv('EVENT_EXTRA_LUCKY_CHANCE') * 100;
+        $this->eventExtraLuckyChance = env('EVENT_EXTRA_LUCKY_CHANCE') * 100;
         $this->eventChoiceRepository = new EventChoiceRepository;
     }
 

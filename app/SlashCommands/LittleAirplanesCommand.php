@@ -4,6 +4,7 @@ namespace App\SlashCommands;
 
 use Discord\Voice\VoiceClient;
 use Laracord\Commands\SlashCommand;
+use Illuminate\Support\Facades\Storage;
 use App\Helpers\RedisHelper;
 use App\Repositories\UserRepository;
 use App\Repositories\UserCoinHistoryRepository;
@@ -101,7 +102,7 @@ class LittleAirplanesCommand extends SlashCommand
             $interaction->respondWithMessage(
                 $this->message(sprintf(
                         'Foram **%s coins** em :airplane_small: aviõeszinhos hoje que não dava pra ver o céu oêê! Agora só amanhã rá rá ê hi hi!',
-                        getenv('LITTLE_AIRPLANES_MAXIMUM_AMOUNT_DAY')
+                        env('LITTLE_AIRPLANES_MAXIMUM_AMOUNT_DAY')
                     ))
                     ->title('MAH ÔÊÊ!')
                     ->color('#FF0000')
@@ -135,7 +136,7 @@ class LittleAirplanesCommand extends SlashCommand
 
             // Little Airplanes Sound
             $channel = $this->discord->getChannel($interaction->channel_id);
-            $audio = storage_path('sounds/avioeszinhos.mp3');
+            $audio = Storage::path('sounds/avioeszinhos.mp3');
             $voice = $this->discord->getVoiceClient($channel->guild_id);
 
             if ($channel->isVoiceBased()) {
