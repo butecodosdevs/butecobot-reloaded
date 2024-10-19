@@ -4,6 +4,7 @@ namespace App\SlashCommands;
 
 use Laracord\Commands\SlashCommand;
 use App\Helpers\RedisHelper;
+use App\Helpers\NumberMaskHelper;
 use App\Repositories\UserRepository;
 
 
@@ -133,8 +134,9 @@ class CoinsCommand extends SlashCommand
                     $message .= "**+%s diárias**\n";
                     $message = sprintf($message, $dailyCoins);
                 }
-
-                $message .= sprintf('**%s** coins', $currentCoins);
+                
+                maskedCoinsString = NumberMaskHelper::cooldown($currentCoins);
+                $message .= sprintf('**%s** coins', $maskedCoinsString);
                 $image = config('images.one_coin');
 
                 $interaction->sendFollowUpMessage(
