@@ -23,7 +23,7 @@ trait PlayJokenpo
      * @param JokenpoEntity $game
      * @return void
      */
-    public function setGame(JokenpoEntity $game) : void
+    public function setGame(JokenpoEntity $game): void
     {
         $this->games[$game->getId()] = $game;
     }
@@ -32,7 +32,7 @@ trait PlayJokenpo
      * @param int $gameId
      * @return JokenpoEntity
      */
-    public function getGame(int $gameId) : JokenpoEntity
+    public function getGame(int $gameId): JokenpoEntity
     {
         return $this->games[$gameId];
     }
@@ -41,7 +41,7 @@ trait PlayJokenpo
      * @param int $gameId
      * @return bool
      */
-    public function hasGame(int $gameId) : bool
+    public function hasGame(int $gameId): bool
     {
         return isset($this->games[$gameId]);
     }
@@ -50,7 +50,7 @@ trait PlayJokenpo
      * @param JokenpoEntity $game
      * @return void
      */
-    public function updateGame(JokenpoEntity $game) : void
+    public function updateGame(JokenpoEntity $game): void
     {
         $this->games[$game->getId()] = $game;
     }
@@ -59,7 +59,7 @@ trait PlayJokenpo
      * @param int $gameId
      * @return void
      */
-    public function deleteGame(int $gameId) : void
+    public function deleteGame(int $gameId): void
     {
         unset($this->games[$gameId]);
     }
@@ -68,7 +68,7 @@ trait PlayJokenpo
      * @param int $gameId
      * @return int
      */
-    public function setCounter(JokenpoEntity $game, int $counter) : void
+    public function setCounter(JokenpoEntity $game, int $counter): void
     {
         $this->counters[$game->getId()] = $counter;
     }
@@ -77,7 +77,7 @@ trait PlayJokenpo
      * @param JokenpoEntity $game
      * @return int
      */
-    public function getCounter(JokenpoEntity $game) : int
+    public function getCounter(JokenpoEntity $game): int
     {
         return $this->counters[$game->getId()];
     }
@@ -86,7 +86,7 @@ trait PlayJokenpo
      * @param int $gameId
      * @return void
      */
-    public function decreaseCounter(int $gameId) : void
+    public function decreaseCounter(int $gameId): void
     {
         $this->counters[$gameId]--;
     }
@@ -95,7 +95,7 @@ trait PlayJokenpo
      * @param int $gameId
      * @return void
      */
-    public function deleteCounter(int $gameId) : void
+    public function deleteCounter(int $gameId): void
     {
         unset($this->counters[$gameId]);
     }
@@ -104,7 +104,7 @@ trait PlayJokenpo
      * @param Interaction $interaction
      * @return void
      */
-    public function startCounter(Interaction $interaction, JokenpoEntity $game) : void
+    public function startCounter(Interaction $interaction, JokenpoEntity $game): void
     {
         $timer = $this->bot->getLoop()->addPeriodicTimer(1.5, function () use (&$timer, $interaction, $game) {
             $counter = $this->getCounter($game);
@@ -139,7 +139,7 @@ trait PlayJokenpo
      * @param  int  $gameId
      * @return void
      */
-    public function playJokenpo(Interaction $interaction, string $type, int $gameId) : void
+    public function playJokenpo(Interaction $interaction, string $type, int $gameId): void
     {
         $discordId = $interaction->member->user->id;
         $userCoinHistoryRepository = new UserCoinHistoryRepository;
@@ -150,8 +150,8 @@ trait PlayJokenpo
         if ($counter <= 1) {
             $interaction->respondWithMessage(
                 $this
-                ->message('O tempo para jogar acabou!')
-                ->build(),
+                    ->message('O tempo para jogar acabou!')
+                    ->build(),
                 true
             );
             return;
@@ -160,8 +160,8 @@ trait PlayJokenpo
         if ($userCoinHistoryRepository->hasAvailableCoins($discordId, 200.0) === false) {
             $interaction->respondWithMessage(
                 $this
-                ->message('Você não tem coins suficientes para jogar!')
-                ->build(),
+                    ->message('Você não tem coins suficientes para jogar!')
+                    ->build(),
                 true
             );
             return;
@@ -172,8 +172,8 @@ trait PlayJokenpo
         if (!$playerMove) {
             $interaction->respondWithMessage(
                 $this
-                ->message('Você já fez sua jogada!')
-                ->build(),
+                    ->message('Você já fez sua jogada!')
+                    ->build(),
                 true
             );
             return;
@@ -206,31 +206,31 @@ trait PlayJokenpo
     /**
      * @return \Discord\Builders\MessageBuilder
      */
-    public function buildGameMessage(JokenpoEntity $game) : MessageBuilder
+    public function buildGameMessage(JokenpoEntity $game): MessageBuilder
     {
         $players = implode("\n", array_map(fn($player) => sprintf("<@%s>", $player->getDiscordId()), $game->getPlayers()));
         $choices = implode("\n", array_map(fn($player) => sprintf("%s %s", $game->getEmoji($player->getMove()), ucwords($player->getMove())), $game->getPlayers()));
 
         return $this
-        ->message(sprintf("Ado, ado, ado quem perder é...ruim!\n\nCusto: :coin: 200\nPrêmio: :coin: 400\n\n⏰: **%s**", $this->getCounter($game)))
-        ->title(sprintf('JO-KEN-PÔ! (%s)', $game->getId()))
-        ->image(config('butecobot.images.jokenpo'))
-        ->fields([
-            'Jogador' => $players,
-            'Escolheu' => $choices,
-        ])
-        ->button("Pedra", route: 'action:pedra:' . $game->getId(), style: 'secondary', emoji: $game->getEmoji('pedra'))
-        ->button("Papel", route: 'action:papel:' . $game->getId(), style: 'secondary', emoji: $game->getEmoji('papel'))
-        ->button("Tesoura", route: 'action:tesoura:' . $game->getId(), style: 'secondary', emoji: $game->getEmoji('tesoura'))
-        ->button("Lagarto", route: 'action:lagarto:' . $game->getId(), style: 'secondary', emoji: $game->getEmoji('lagarto'))
-        ->button("Spock", route: 'action:spock:' . $game->getId(), style: 'secondary', emoji: $game->getEmoji('spock'))
-        ->build();
+            ->message(sprintf("Ado, ado, ado quem perder é...ruim!\n\nCusto: :coin: 200\nPrêmio: :coin: 400\n\n⏰: **%s**", $this->getCounter($game)))
+            ->title(sprintf('JO-KEN-PÔ! (%s)', $game->getId()))
+            ->image(config('butecobot.images.jokenpo'))
+            ->fields([
+                'Jogador' => $players,
+                'Escolheu' => $choices,
+            ])
+            ->button("Pedra", route: 'action:pedra:' . $game->getId(), style: 'secondary', emoji: $game->getEmoji('pedra'))
+            ->button("Papel", route: 'action:papel:' . $game->getId(), style: 'secondary', emoji: $game->getEmoji('papel'))
+            ->button("Tesoura", route: 'action:tesoura:' . $game->getId(), style: 'secondary', emoji: $game->getEmoji('tesoura'))
+            ->button("Lagarto", route: 'action:lagarto:' . $game->getId(), style: 'secondary', emoji: $game->getEmoji('lagarto'))
+            ->button("Spock", route: 'action:spock:' . $game->getId(), style: 'secondary', emoji: $game->getEmoji('spock'))
+            ->build();
     }
 
     /**
      * @return \Discord\Builders\MessageBuilder
      */
-    public function buildGameResults(JokenpoEntity $game) : MessageBuilder
+    public function buildGameResults(JokenpoEntity $game): MessageBuilder
     {
         $userCoinHistoryRepository = new UserCoinHistoryRepository;
         $userRepository = new UserRepository;
@@ -269,18 +269,18 @@ trait PlayJokenpo
         $this->deleteCounter($game->getId());
 
         return $this
-        ->message(
-            sprintf(
-                "Eu escolhi: **%s**\n\nCusto: :coin: 200\nPrêmio: :coin: 400\n\n",
-                sprintf("%s %s", $game->getEmoji($game->getBotMove()), ucwords($game->getBotMove()))
+            ->message(
+                sprintf(
+                    "Eu escolhi: **%s**\n\nCusto: :coin: 200\nPrêmio: :coin: 400\n\n",
+                    sprintf("%s %s", $game->getEmoji($game->getBotMove()), ucwords($game->getBotMove()))
+                )
             )
-        )
-        ->title(sprintf('JO-KEN-PÔ! (%s)', $game->getId()))
-        ->fields([
-            'Jogador' => $players,
-            'Escolheu' => $choices,
-            'Resultado' => $results,
-        ])
-        ->build();
+            ->title(sprintf('JO-KEN-PÔ! (%s)', $game->getId()))
+            ->fields([
+                'Jogador' => $players,
+                'Escolheu' => $choices,
+                'Resultado' => $results,
+            ])
+            ->build();
     }
 }
