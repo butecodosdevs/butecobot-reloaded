@@ -83,15 +83,16 @@ class UserRepository
 
     public function canReceivedDailyCoins(string $discordId): bool
     {
-        $userCoinHistory = UserCoinHistory::
-                                whereHas('user', function ($query) use ($discordId) {
+        $userCoinHistory = UserCoinHistory::whereHas('user', function ($query) use ($discordId) {
                                     $query->where('discord_id', $discordId);
                                 })
                                 ->where('type', 'Daily')
-                                ->whereDate('created_at', DB::raw('date(now())'))
-                                ->get()->toArray();
+                                ->whereDay('created_at', DB::raw('DAY(NOW())'))
+                                ->whereMonth('created_at', DB::raw('MONTH(NOW())'))
+                                ->whereYear('created_at', DB::raw('YEAR(NOW())'))
+                                ->get();
 
-        return empty($userCoinHistory);
+        return $userCoinHistory->isEmpty();
     }
 
     public function updateReceivedInitialCoins(int $userId): bool

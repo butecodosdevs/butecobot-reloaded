@@ -29,6 +29,9 @@ trait AnnounceEvents
             $interaction->respondWithMessage(
                 $this->message('Evento não existe')
                 ->title('Eventos')
+                ->authorName('')
+                ->authorIcon('')
+                ->error()
                 ->build(),
                 true
             );
@@ -38,7 +41,10 @@ trait AnnounceEvents
         if (!in_array($event['status'], [EventRepository::OPEN])) {
             $interaction->respondWithMessage(
                 $this->message('Evento precisa estar aberto!')
-                ->title('Eventos')
+                ->title(sprintf('[#%s] %s', $event['id'], $event['name']))
+                ->authorName('')
+                ->authorIcon('')
+                ->error()
                 ->build(),
                 true
             );
@@ -59,10 +65,15 @@ trait AnnounceEvents
             }
         }
 
+        $statusMessage = match($event['status']) {
+            $eventRepository::CLOSED => ':red_square: Fechado para apostas',
+            default => ':green_square: Aberto para apostas',
+        };
+
         $eventOdds = $eventRepository->calculateOdds($eventId);
         $eventsDescription = sprintf(
-            "**Status do Evento:** %s \n **A**: %s \n **B**: %s \n \n",
-            $eventRepository::LABEL[$event['status']],
+            "**%s** \n\n **A**: %s \n **B**: %s \n\n",
+            $statusMessage,
             sprintf('%s (x%s)', $event['choices'][0]['description'], number_format($eventOdds['odds_a'], 2)),
             sprintf('%s (x%s)', $event['choices'][1]['description'], number_format($eventOdds['odds_b'], 2))
         );
@@ -70,10 +81,13 @@ trait AnnounceEvents
         $interaction->respondWithMessage(
             $this->message($eventsDescription)
             ->title(sprintf('[#%s] %s', $event['id'], $event['name']))
+            ->authorName('')
+            ->authorIcon('')
             ->color('#F5D920')
-            ->button('Apostar A', route: "betOn:{$event['id']}:A")
-            ->button('Apostar B', route: "betOn:{$event['id']}:B")
+            ->button("A: " . $event['choices'][0]['description'], route: "betOn:{$event['id']}:A", style: 'secondary', emoji: '🎫')
+            ->button("B: " . $event['choices'][1]['description'], route: "betOn:{$event['id']}:B", style: 'secondary', emoji: '🎫')
             ->image(config('butecobot.images.events')[$bannerKey])
+            ->info()
             ->build()
         );
     }

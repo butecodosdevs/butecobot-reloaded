@@ -36,13 +36,14 @@ trait CreateEvents
 
         $interaction->respondWithMessage(
             $this->message(sprintf(
-                    "Evento criado com sucesso!\n\n**[#%s] %s**\nA: %s\nB: %s",
-                    $event['id'],
-                    $eventName,
+                    "A: %s \nB: %s \n\n**:notepad_spiral: Evento criado com sucesso!**",
                     $optionA,
                     $optionB
                 ))
-                ->title('Eventos')
+                ->title(sprintf('[#%s] %s', $event['id'], $event['name']))
+                ->authorName('')
+                ->authorIcon('')
+                ->info()
                 ->build(),
             true
         );

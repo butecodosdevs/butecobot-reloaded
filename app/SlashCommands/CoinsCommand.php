@@ -6,7 +6,6 @@ use Laracord\Commands\SlashCommand;
 use App\Helpers\RedisHelper;
 use App\Repositories\UserRepository;
 
-
 class CoinsCommand extends SlashCommand
 {
     /**
@@ -134,7 +133,7 @@ class CoinsCommand extends SlashCommand
                     $message = sprintf($message, $dailyCoins);
                 }
 
-                $message .= sprintf('**%s** coins', $currentCoins);
+                $message .= sprintf('**B$ %s** coins', number_format($currentCoins, 2, ',', '.'));
                 $image = config('images.one_coin');
 
                 $interaction->sendFollowUpMessage(

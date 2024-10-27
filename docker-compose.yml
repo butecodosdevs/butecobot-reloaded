@@ -1,73 +1,103 @@
 services:
-  butecobot-reloaded:
-    container_name: butecobot-reloaded-app
+  bot:
+    container_name: bbot-app
     image: brunofunnie/butecobot-reloaded-app:latest
     environment:
-      - ENVIRONMENT=${ENVIRONMENT:-development}
-      - DB_HOST=${DB_HOST:-mysql}
-      - DB_DATABASE=${DB_DATABASE:-butecobot}
-      - DB_USERNAME=${DB_USERNAME:-root}
-      - DB_PASSWORD=${DB_PASSWORD:-root}
+      TZ: "America/Sao_Paulo"
+      ENVIRONMENT: ${ENVIRONMENT:-development}
     volumes:
       - ./builds/.env:/app/.env
       - ./storage/:/app/storage/
       - ./storage/logs/:/app/logs/
     networks:
-      butecobot-reloaded:
+      bbot:
 
   mysql:
-    container_name: butecobot-reloaded-mysql
+    container_name: bbot-mysql
     image: mysql:8.1.0
-    ports:
-      - 3306:3306
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=butecobot
-      - MYSQL_USER=butecobot
-      - MYSQL_PASSWORD=butecobot
+      TZ: "America/Sao_Paulo"
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "butecobot"
+      MYSQL_USER: "butecobot"
+      MYSQL_PASSWORD: "butecobot"
+    ports:
+      - "3306:3306"
     volumes:
       - mysql:/var/lib/mysql
       - ./docker/confs/mysql/my.cnf:/etc/mysql/my.cnf
     networks:
-       butecobot-reloaded:
+      bbot:
 
   pma:
-    container_name: butecobot-reloaded-pma
+    container_name: bbot-pma
     image: phpmyadmin:5.2.1-apache
-    ports:
-      - 8081:80
     environment:
-      - PMA_ARBITRARY=1
-      - MEMORY_LIMIT=2048M
-      - UPLOAD_LIMIT=2048M
-    networks:
-       butecobot-reloaded:
-
-  redis:
-    container_name: butecobot-reloaded-redis
-    image: redis:7.2.0-alpine
+      TZ: "America/Sao_Paulo"
+      PMA_ARBITRARY: "1"
+      MEMORY_LIMIT: "2048M"
+      UPLOAD_LIMIT: "2048M"
     ports:
-      - 6379:6379
-    command: redis-server --save 20 1 --loglevel debug --requirepass redis
-    volumes:
-      - redis:/data
+      - "8081:80"
     networks:
-       butecobot-reloaded:
+      bbot:
+
+  mongo:
+    container_name: bbot-mongo
+    image: mongo
+    environment:
+      TZ: "America/Sao_Paulo"
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb:/data/db
+    networks:
+      bbot:
+
+  mongo-express:
+    container_name: bbot-mongo-express
+    image: mongo-express
+    environment:
+      TZ: "America/Sao_Paulo"
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: rootd
+      ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
+      ME_CONFIG_BASICAUTH: false
+    ports:
+      - "8082:8081"
+    networks:
+      bbot:
+
+  valkey:
+    container_name: bbot-valkey
+    image: valkey/valkey
+    environment:
+      TZ: "America/Sao_Paulo"
+    ports:
+      - "6379:6379"
+    volumes:
+      - valkey:/data
+    command: valkey-server --save 20 1 --loglevel warning --requirepass valkey
+    networks:
+      bbot:
 
   mpit:
-    container_name: butecobot-reloaded-mailpit
+    container_name: bbot-mailpit
     image: axllent/mailpit
-    ports:
-      - 8025:8025
-      - 1025:1025
     environment:
-      - TZ=America/Sao_Paulo
+      TZ: "America/Sao_Paulo"
+    ports:
+      - "8025:8025"
+      - "1025:1025"
     networks:
-       butecobot-reloaded:
+      bbot:
 
 networks:
-  butecobot-reloaded:
+  bbot:
 
 volumes:
   mysql:
-  redis:
+  valkey:
+  mongodb:
