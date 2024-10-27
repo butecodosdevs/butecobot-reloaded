@@ -1,6 +1,7 @@
 /vendor
 /builds
 /.laracord
+/storage/avatars/**/*
 *.sqlite
 .env
 .DS_Store

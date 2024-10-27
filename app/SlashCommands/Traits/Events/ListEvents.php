@@ -41,6 +41,9 @@ trait ListEvents
             $interaction->respondWithMessage(
                 $this->message('Nenhum evento encontrado')
                     ->title('Eventos')
+                    ->authorName('')
+                    ->authorIcon('')
+                    ->info()
                     ->build(),
                 true
             );
@@ -81,30 +84,31 @@ trait ListEvents
         $eventsRepository = new EventRepository;
         $event = $this->listEventsEvents[$this->listEventsCurrentPage];
         $eventOdds = $eventsRepository->calculateOdds($event['id']);
-        $statusIcon = match($event['status']) {
-            $eventsRepository::CLOSED => '🔴',
-            default => '🟢',
+        $statusMessage = match($event['status']) {
+            $eventsRepository::CLOSED => ':red_square: Fechado para apostas',
+            default => ':green_square: Aberto para apostas',
         };
         $eventsDescription = sprintf(
-            "**%s** \n **%s %s** \n\n **A**: %s \n **B**: %s",
-            strtoupper($event['name']),
-            $statusIcon,
-            $eventsRepository::LABEL_LONG[(int) $event['status']],
+            "**%s** \n\n **A**: %s \n **B**: %s",
+            $statusMessage,
             sprintf('%s (x%s)', $event['choices'][0]['description'], number_format($eventOdds['odds_a'], 2)),
             sprintf('%s (x%s)', $event['choices'][1]['description'], number_format($eventOdds['odds_b'], 2))
         );
 
         return $this->message($eventsDescription)
-                    ->title(sprintf('Evento **#%s**', $event['id']))
+                    ->title(sprintf('[#%s] %s', $event['id'], $event['name']))
                     ->color('#F5D920')
+                    ->authorName('')
+                    ->authorIcon('')
                     ->thumbnail(config('images.event'))
-                    ->button('<', route: 'list:backward')
-                    ->button('>', route: 'list:forward')
+                    ->button('', route: 'list:backward', style: 'secondary', emoji: '⬅️')
+                    ->button('', route: 'list:forward', style: 'secondary', emoji: '➡️')
                     ->footerText(sprintf(
                         'Página %s de %s',
                         $this->listEventsCurrentPage + 1,
                         $this->listEventsEvents->count()
                     ))
+                    ->info()
                     ->build();
     }
 }

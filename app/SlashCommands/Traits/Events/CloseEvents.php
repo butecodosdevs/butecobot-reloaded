@@ -26,6 +26,8 @@ trait CloseEvents
             $interaction->respondWithMessage(
                 $this->message(sprintf('Evento **#%s** precisa estar aberto para ser fechado!', $eventId))
                     ->title('Eventos')
+                    ->authorName('')
+                    ->authorIcon('')
                     ->build(),
                 false
             );
@@ -36,6 +38,8 @@ trait CloseEvents
             $interaction->respondWithMessage(
                 $this->message(sprintf('Evento **#%s** não existe!', $eventId))
                     ->title('Eventos')
+                    ->authorName('')
+                    ->authorIcon('')
                     ->build(),
                 false
             );
@@ -45,7 +49,10 @@ trait CloseEvents
         if (!$eventRepository->closeEvent($eventId)) {
             $interaction->respondWithMessage(
                 $this->message(sprintf('Ocorreu um erro ao finalizar evento **#%s**', $eventId))
-                    ->title('Eventos')
+                    ->title(sprintf('[#%s] %s', $event['id'], $event['name']))
+                    ->authorName('')
+                    ->authorIcon('')
+                    ->error()
                     ->build(),
                 false
             );
@@ -53,8 +60,11 @@ trait CloseEvents
         }
 
         $interaction->respondWithMessage(
-            $this->message(sprintf('Evento **#%s** fechado! Esse evento não recebe mais apostas!', $eventId))
-                ->title('Eventos')
+            $this->message("Evento fechado! :lock: \n Esse evento não recebe mais apostas!")
+                ->title(sprintf('[#%s] %s', $event['id'], $event['name']))
+                ->authorName('')
+                ->authorIcon('')
+                ->info()
                 ->build(),
             false
         );

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Support\Facades\Route;
+use Discord\Parts\User\Activity;
 use Laracord\Laracord;
 
 class Bot extends Laracord
@@ -22,5 +23,15 @@ class Bot extends Laracord
             //     'description' => $command->getDescription(),
             // ]));
         });
+    }
+
+    public function afterBoot(): void
+    {
+        $activity = $this->discord()->factory(Activity::class, [
+            'type' => Activity::TYPE_PLAYING,
+            'name' => 'Fiado só amanhã!',
+        ]);
+
+        $this->discord()->updatePresence($activity);
     }
 }

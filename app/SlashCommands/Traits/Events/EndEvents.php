@@ -27,6 +27,9 @@ trait EndEvents
             $interaction->respondWithMessage(
                 $this->message('Evento não existe')
                     ->title('Eventos')
+                    ->authorName('')
+                    ->authorIcon('')
+                    ->error()
                     ->build(),
                 true
             );
@@ -37,6 +40,9 @@ trait EndEvents
             $interaction->respondWithMessage(
                 $this->message('Este evento já foi pago!')
                     ->title('Eventos')
+                    ->authorName('')
+                    ->authorIcon('')
+                    ->error()
                     ->build(),
                 true
             );
@@ -47,6 +53,9 @@ trait EndEvents
             $interaction->respondWithMessage(
                 $this->message('Evento precisa estar fechado para ser finalizado!')
                     ->title('Eventos')
+                    ->authorName('')
+                    ->authorIcon('')
+                    ->error()
                     ->build(),
                 true
             );
@@ -58,6 +67,7 @@ trait EndEvents
                 $interaction->respondWithMessage(
                     $this->message('Erro ao encerrar evento')
                         ->title('Eventos')
+                        ->error()
                         ->build(),
                     true
                 );
@@ -65,8 +75,11 @@ trait EndEvents
             }
 
             $interaction->respondWithMessage(
-                $this->message(sprintf("Evento: #%s %s\nResultado: Empate!\n\nApostas devolvidas", $eventId, $event['name']))
-                    ->title('Eventos')
+                $this->message(sprintf(":necktie: Evento empatado! Apostas devolvidas"))
+                    ->title(sprintf('[#%s] %s', $event['id'], $event['name']))
+                    ->authorName('')
+                    ->authorIcon('')
+                    ->warning()
                     ->build(),
                 false
             );
@@ -78,7 +91,10 @@ trait EndEvents
         if (count($payoutEvent['winners']) === 0) {
             $interaction->respondWithMessage(
                 $this->message('Não houveram apostas neste evento!')
-                    ->title('Eventos')
+                    ->title(sprintf('[#%s] %s', $event['id'], $event['name']))
+                    ->authorIcon('')
+                    ->authorName('')
+                    ->warning()
                     ->build(),
                     false
                 );
@@ -92,26 +108,28 @@ trait EndEvents
         foreach ($payoutEvent['winners'] as $winner) {
             if ($winner['choice'] == $choiceOption) {
                 $winnersLabel .= sprintf("<@%s> \n", $winner['discord_id']);
-                $earningsLabel .= sprintf("%s %s \n", $winner['earnings'], $winner['extraLabel']);
+                $earningsLabel .= sprintf("B$ %s %s \n", number_format($winner['earnings'], 2, '.', ','), $winner['extraLabel']);
             }
         }
 
         $eventsDescription = sprintf(
-            "**%s** \n **Vencedor**: %s - %s \n \n \n",
-            $event['name'],
+            "**Vencedor do evento**: \n**:star2: %s: %s**\n",
             $choiceOption,
             $payoutEvent['winner_choice']['description']
         );
 
         $interaction->respondWithMessage(
             $this->message($eventsDescription)
-                ->title('Eventos')
+                ->title(sprintf('[#%s] %s', $event['id'], $event['name']))
+                ->authorName('')
+                ->authorIcon('')
                 ->color('#F5D920')
                 ->fields([
                     'Ganhador' => $winnersLabel,
                     'Valor' => $earningsLabel
                 ])
                 ->image($winnersImage)
+                ->success()
                 ->build()
         );
     }

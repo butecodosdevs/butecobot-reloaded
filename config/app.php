@@ -68,6 +68,7 @@ return [
 
     'providers' => [
         App\Providers\BotServiceProvider::class,
+        MongoDB\Laravel\MongoDBServiceProvider::class,
     ],
 
 ];

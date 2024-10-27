@@ -43,7 +43,7 @@ return [
     |
     */
 
-    'intents' => Intents::getDefaultIntents() | Intents::MESSAGE_CONTENT | Intents::GUILD_MEMBERS | Intents::GUILD_MESSAGES,
+    'intents' => Intents::getDefaultIntents() | Intents::MESSAGE_CONTENT | Intents::GUILD_MEMBERS | Intents::GUILD_MESSAGES | Intents::GUILD_PRESENCES,
 
     /*
     |--------------------------------------------------------------------------

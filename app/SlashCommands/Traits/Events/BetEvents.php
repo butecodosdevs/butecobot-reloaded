@@ -64,6 +64,9 @@ trait BetEvents
             $interaction->respondWithMessage(
                 $this->message('ID do evento inválido')
                     ->title('Eventos')
+                    ->authorName('')
+                    ->authorIcon('')
+                    ->error()
                     ->build(),
                 true
             );
@@ -86,6 +89,9 @@ trait BetEvents
             $interaction->respondWithMessage(
                 $this->message($errorMessage)
                     ->title('Eventos')
+                    ->authorName('')
+                    ->authorIcon('')
+                    ->error()
                     ->build(),
                 true
             );
@@ -101,18 +107,18 @@ trait BetEvents
         if ($bet) {
             $interaction->respondWithMessage(
                 $this->message(sprintf(
-                        "**%s**\nOpção: **%s - %s**\nValor apostado: **%s** coins",
-                        $event['name'],
-                        $betChoice,
-                        $choiceDetails[0]['description'],
-                        $betAmount,
-                        $betChoice
+                    "🎫 **%s: %s** \n\nValor apostado: **B$ %s**",
+                    $betChoice,
+                    $choiceDetails[0]['description'],
+                    number_format($betAmount, 2, '.', ','),
+                    $betChoice
                 ))
-                ->title('Eventos')
+                ->title(sprintf('[#%s] %s', $event['id'], $event['name']))
                 ->color('#F5D920')
-                ->authorIcon($interaction->member->user->getAvatarAttribute())
-                ->authorName($interaction->member->user->username)
+                ->authorName('')
+                ->authorIcon('')
                 ->thumbnail(config('butecobot.images.place_bet'))
+                ->info()
                 ->build(),
                 true
             );

@@ -85,7 +85,6 @@ class TopCeosCommand extends SlashCommand
         $interaction->respondWithMessage(
             $this->message()
                 ->authorName('')
-                ->avatar('')
                 ->title('TOP 10 PATRÕES')
                 ->color('#F5D920')
                 ->image($topBettersImage)
